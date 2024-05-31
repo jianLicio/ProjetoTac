@@ -1,0 +1,12 @@
+utfpr\edu\br\t_a_c\projeto_t_a_c\model\Gateway.class
+utfpr\edu\br\t_a_c\projeto_t_a_c\service\AtuadorService.class
+utfpr\edu\br\t_a_c\projeto_t_a_c\controller\AtuadorController.class
+utfpr\edu\br\t_a_c\projeto_t_a_c\model\Dispositivo.class
+utfpr\edu\br\t_a_c\projeto_t_a_c\exception\NotFoundException.class
+utfpr\edu\br\t_a_c\projeto_t_a_c\model\Pessoa.class
+utfpr\edu\br\t_a_c\projeto_t_a_c\model\Atuador.class
+utfpr\edu\br\t_a_c\projeto_t_a_c\model\Leitura.class
+utfpr\edu\br\t_a_c\projeto_t_a_c\model\Sensor.class
+utfpr\edu\br\t_a_c\projeto_t_a_c\ProjetoTACApplication.class
+utfpr\edu\br\t_a_c\projeto_t_a_c\repository\AtuadorRepository.class
+utfpr\edu\br\t_a_c\projeto_t_a_c\dto\AtuadorDTO.class

@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-ProjetoTACApplication<projeto_t_a_c>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "utfpr.edu.br.t_a_c.projeto_t_a_c.ProjetoTACApplication",
+            "projectName": "projeto_t_a_c",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}
