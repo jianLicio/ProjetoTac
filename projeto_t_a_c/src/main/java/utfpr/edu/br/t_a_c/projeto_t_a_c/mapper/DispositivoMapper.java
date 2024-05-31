@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.BeanUtils;
+import org.springframework.stereotype.Component;
 
 import utfpr.edu.br.t_a_c.projeto_t_a_c.dto.DispositivoDTO;
 import utfpr.edu.br.t_a_c.projeto_t_a_c.model.Atuador;
@@ -15,8 +16,10 @@ import utfpr.edu.br.t_a_c.projeto_t_a_c.repository.AtuadorRepository;
 import utfpr.edu.br.t_a_c.projeto_t_a_c.repository.GatewayRepository;
 import utfpr.edu.br.t_a_c.projeto_t_a_c.repository.SensorRepository;
 
+@Component
 public class DispositivoMapper {
-    public Dispositivo toEntity(
+  
+        public Dispositivo toEntity(
             DispositivoDTO dto,
             GatewayRepository gatewayRepository,
             SensorRepository sensorRepository,

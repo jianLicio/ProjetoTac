@@ -3,12 +3,14 @@ package utfpr.edu.br.t_a_c.projeto_t_a_c.mapper;
 import java.time.LocalDateTime;
 
 import org.springframework.beans.BeanUtils;
+import org.springframework.stereotype.Component;
 
 import utfpr.edu.br.t_a_c.projeto_t_a_c.dto.LeituraDTO;
 import utfpr.edu.br.t_a_c.projeto_t_a_c.model.Leitura;
 import utfpr.edu.br.t_a_c.projeto_t_a_c.model.Sensor;
 import utfpr.edu.br.t_a_c.projeto_t_a_c.repository.SensorRepository;
 
+@Component
 public class LeituraMapper {
 
     public Leitura toEntity(

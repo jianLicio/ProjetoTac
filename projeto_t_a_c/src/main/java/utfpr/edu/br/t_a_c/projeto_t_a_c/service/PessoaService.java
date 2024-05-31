@@ -4,12 +4,14 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
+import org.springframework.stereotype.Service;
 
 import utfpr.edu.br.t_a_c.projeto_t_a_c.dto.CriarPessoaDTO;
 import utfpr.edu.br.t_a_c.projeto_t_a_c.exception.NotFoundException;
 import utfpr.edu.br.t_a_c.projeto_t_a_c.model.Pessoa;
 import utfpr.edu.br.t_a_c.projeto_t_a_c.repository.PessoaRepository;
 
+@Service
 public class PessoaService {
 
     private PessoaRepository pessoaRepository;

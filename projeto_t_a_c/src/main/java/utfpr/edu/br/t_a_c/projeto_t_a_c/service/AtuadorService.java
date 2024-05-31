@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import utfpr.edu.br.t_a_c.projeto_t_a_c.dto.AtuadorDTO;
 import utfpr.edu.br.t_a_c.projeto_t_a_c.exception.NotFoundException;
@@ -12,6 +13,7 @@ import utfpr.edu.br.t_a_c.projeto_t_a_c.model.Atuador;
 import utfpr.edu.br.t_a_c.projeto_t_a_c.repository.AtuadorRepository;
 import utfpr.edu.br.t_a_c.projeto_t_a_c.repository.DispositivoRepository;
 
+@Service
 public class AtuadorService {
     @Autowired
     private AtuadorRepository atuadorRepository;

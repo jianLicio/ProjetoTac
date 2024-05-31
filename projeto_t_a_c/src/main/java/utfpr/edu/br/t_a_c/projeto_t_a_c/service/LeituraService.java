@@ -5,12 +5,14 @@ import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import utfpr.edu.br.t_a_c.projeto_t_a_c.dto.LeituraDTO;
 import utfpr.edu.br.t_a_c.projeto_t_a_c.exception.NotFoundException;
 import utfpr.edu.br.t_a_c.projeto_t_a_c.model.Leitura;
 import utfpr.edu.br.t_a_c.projeto_t_a_c.repository.LeituraRepository;
 
+@Service
 public class LeituraService {
     @Autowired
     private LeituraRepository leituraRepository;

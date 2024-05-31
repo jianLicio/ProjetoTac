@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.BeanUtils;
+import org.springframework.stereotype.Component;
 
 import utfpr.edu.br.t_a_c.projeto_t_a_c.dto.GatewayDTO;
 import utfpr.edu.br.t_a_c.projeto_t_a_c.model.Dispositivo;
@@ -13,6 +14,7 @@ import utfpr.edu.br.t_a_c.projeto_t_a_c.model.Pessoa;
 import utfpr.edu.br.t_a_c.projeto_t_a_c.repository.DispositivoRepository;
 import utfpr.edu.br.t_a_c.projeto_t_a_c.repository.PessoaRepository;
 
+@Component
 public class GatewayMapper {
         public Gateway toEntity(
                         GatewayDTO dto,
