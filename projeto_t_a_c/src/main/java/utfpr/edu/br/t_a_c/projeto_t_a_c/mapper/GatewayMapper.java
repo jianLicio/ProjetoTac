@@ -34,11 +34,14 @@ public class GatewayMapper {
                                 .orElseThrow(() -> new RuntimeException("Pessoa não encontrada"));
                 gateway.setPessoa(pessoa);
 
-                List<Dispositivo> dispositivo = dto.dispositivoId().stream()
-                                .map(id -> dispositivoRepository.findById(id)
-                                                .orElseThrow(() -> new RuntimeException("Dispositivo não encontrado")))
-                                .collect(Collectors.toList());
-                gateway.setDispositivos(dispositivo);
+                if (dto.dispositivoId() != null && !dto.dispositivoId().isEmpty()) {
+                        List<Dispositivo> dispositivo = dto.dispositivoId().stream()
+                                        .map(id -> dispositivoRepository.findById(id)
+                                                        .orElseThrow(() -> new RuntimeException(
+                                                                        "Dispositivo não encontrado")))
+                                        .collect(Collectors.toList());
+                        gateway.setDispositivos(dispositivo);
+                }
 
                 gateway.setCriadoEm(LocalDateTime.now());
                 gateway.setAtualizadoEm(LocalDateTime.now());
@@ -51,7 +54,10 @@ public class GatewayMapper {
                                 gateway.getNome(),
                                 gateway.getLocalizacao(),
                                 gateway.getPessoa().getId(),
-                                gateway.getDispositivos().stream().map(Dispositivo::getId).collect(Collectors.toList()),
+                                gateway.getDispositivos() != null
+                                                ? gateway.getDispositivos().stream().map(Dispositivo::getId)
+                                                                .collect(Collectors.toList())
+                                                : null,
                                 gateway.getCriadoEm(),
                                 gateway.getAtualizadoEm());
         }
@@ -74,12 +80,14 @@ public class GatewayMapper {
                                 .orElseThrow(() -> new RuntimeException("Pessoa não encontrada"));
                 gateway.setPessoa(pessoa);
 
-                List<Dispositivo> dispositivos = dto.dispositivoId().stream()
-                                .map(id -> dispositivoRepository.findById(id)
-                                                .orElseThrow(() -> new RuntimeException("Dispositivo não encontrado")))
-                                .collect(Collectors.toList());
-                gateway.setDispositivos(dispositivos);
-
+                if (dto.dispositivoId() != null && !dto.dispositivoId().isEmpty()) {
+                        List<Dispositivo> dispositivos = dto.dispositivoId().stream()
+                                        .map(id -> dispositivoRepository.findById(id)
+                                                        .orElseThrow(() -> new RuntimeException(
+                                                                        "Dispositivo não encontrado")))
+                                        .collect(Collectors.toList());
+                        gateway.setDispositivos(dispositivos);
+                }
                 gateway.setAtualizadoEm(LocalDateTime.now());
         }
 }

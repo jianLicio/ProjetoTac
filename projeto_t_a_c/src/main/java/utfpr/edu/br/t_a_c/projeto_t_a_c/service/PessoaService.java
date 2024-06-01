@@ -4,9 +4,10 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import utfpr.edu.br.t_a_c.projeto_t_a_c.dto.CriarPessoaDTO;
+import utfpr.edu.br.t_a_c.projeto_t_a_c.dto.PessoaDTO;
 import utfpr.edu.br.t_a_c.projeto_t_a_c.exception.NotFoundException;
 import utfpr.edu.br.t_a_c.projeto_t_a_c.model.Pessoa;
 import utfpr.edu.br.t_a_c.projeto_t_a_c.repository.PessoaRepository;
@@ -14,16 +15,17 @@ import utfpr.edu.br.t_a_c.projeto_t_a_c.repository.PessoaRepository;
 @Service
 public class PessoaService {
 
+    @Autowired
     private PessoaRepository pessoaRepository;
 
-    public Pessoa create(CriarPessoaDTO dto) {
+    public Pessoa create(PessoaDTO dto) {
         var pessoa = new Pessoa();
         BeanUtils.copyProperties(dto, pessoa);
 
         return pessoaRepository.save(pessoa);
     }
 
-    public List<Pessoa> getAll() {
+    public List<Pessoa> getAll() { 
         return pessoaRepository.findAll();
     }
 
@@ -31,7 +33,7 @@ public class PessoaService {
         return pessoaRepository.findById(id);
     }
 
-    public Pessoa update(long id, CriarPessoaDTO dto) throws NotFoundException {
+    public Pessoa update(long id, PessoaDTO dto) throws NotFoundException {
         var res = pessoaRepository.findById(id);
 
         if (res.isEmpty()) {

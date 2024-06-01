@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import utfpr.edu.br.t_a_c.projeto_t_a_c.dto.CriarPessoaDTO;
+import utfpr.edu.br.t_a_c.projeto_t_a_c.dto.PessoaDTO;
 import utfpr.edu.br.t_a_c.projeto_t_a_c.exception.NotFoundException;
 import utfpr.edu.br.t_a_c.projeto_t_a_c.model.Pessoa;
 import utfpr.edu.br.t_a_c.projeto_t_a_c.service.PessoaService;
@@ -27,7 +27,7 @@ public class PessoaController {
     private PessoaService pessoaService;
 
     @PostMapping
-    public ResponseEntity<Object> create(@RequestBody CriarPessoaDTO dto) {
+    public ResponseEntity<Object> create(@RequestBody PessoaDTO dto) {
         try {
             var res = pessoaService.create(dto);
 
@@ -54,7 +54,7 @@ public class PessoaController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Object> update(@PathVariable long id,
-            @RequestBody CriarPessoaDTO dto) {
+            @RequestBody PessoaDTO dto) {
         try {
             return ResponseEntity.ok().body(pessoaService.update(id, dto));
         } catch (NotFoundException ex) {

@@ -18,7 +18,7 @@ import jakarta.persistence.Table;
 import lombok.Data;
 
 @Entity
-@Table(name = "sensor")
+@Table(name = "tb_sensor")
 @Data
 public class Sensor {
     @Id
