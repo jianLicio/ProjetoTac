@@ -56,7 +56,13 @@ public class SensorMapper {
                                 leitura.getTipo(),
                                 leitura.getDescricao(),
                                 leitura.getDispositivo().getId(),
-                                leitura.getLeituras().stream().map(Leitura::getId).collect(Collectors.toList()),
+
+                                leitura.getLeituras() != null ? leitura
+                                                .getLeituras()
+                                                .stream()
+                                                .map(Leitura::getId).collect(Collectors.toList())
+                                                : null,
+
                                 leitura.getCriadoEm(),
                                 leitura.getAtualizadoEm());
         }

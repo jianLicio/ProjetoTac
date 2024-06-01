@@ -60,8 +60,16 @@ public class DispositivoMapper {
                                 dispositivo.getDescricao(),
                                 dispositivo.getLocalizacao(),
                                 dispositivo.getGateway().getId(),
-                                dispositivo.getSensores().stream().map(Sensor::getId).collect(Collectors.toList()),
-                                dispositivo.getAtuadores().stream().map(Atuador::getId).collect(Collectors.toList()),
+                                dispositivo.getSensores() != null ? dispositivo
+                                                .getSensores()
+                                                .stream()
+                                                .map(Sensor::getId).collect(Collectors.toList())
+                                                : null,
+                                dispositivo.getAtuadores() != null ? dispositivo
+                                                .getAtuadores()
+                                                .stream()
+                                                .map(Atuador::getId).collect(Collectors.toList())
+                                                : null,
                                 dispositivo.getCriadoEm(),
                                 dispositivo.getAtualizadoEm());
         }
