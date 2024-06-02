@@ -7,6 +7,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import jakarta.servlet.http.HttpServletResponse;
 import utfpr.edu.br.t_a_c.projeto_t_a_c.dto.PessoaDTO;
 import utfpr.edu.br.t_a_c.projeto_t_a_c.exception.NotFoundException;
 import utfpr.edu.br.t_a_c.projeto_t_a_c.model.Pessoa;
@@ -15,6 +16,11 @@ import utfpr.edu.br.t_a_c.projeto_t_a_c.repository.PessoaRepository;
 @Service
 public class PessoaService {
 
+    private HttpServletResponse response;
+
+    int statusCode = response.getStatus();
+
+    
     @Autowired
     private PessoaRepository pessoaRepository;
 

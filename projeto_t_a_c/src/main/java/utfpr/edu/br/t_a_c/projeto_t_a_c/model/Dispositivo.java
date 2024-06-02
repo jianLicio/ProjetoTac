@@ -8,6 +8,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -23,6 +24,7 @@ import lombok.Data;
 @Table(name = "tb_dispositivo")
 @Data
 public class Dispositivo {
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -41,10 +43,10 @@ public class Dispositivo {
     @JoinColumn(name = "gateway_id", nullable = false)
     private Gateway gateway;
 
-    @OneToMany(mappedBy = "dispositivo")
+    @OneToMany(mappedBy = "dispositivo", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Sensor> sensores;
 
-    @OneToMany(mappedBy = "dispositivo")
+    @OneToMany(mappedBy = "dispositivo", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Atuador> atuadores;
 
     @Column(nullable = false, updatable = false)
