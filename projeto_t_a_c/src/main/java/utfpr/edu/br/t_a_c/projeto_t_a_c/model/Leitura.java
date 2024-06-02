@@ -5,6 +5,8 @@ import java.time.LocalDateTime;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -26,6 +28,7 @@ public class Leitura {
     @Column(nullable = false)
     private String valor;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "sensor_id", nullable = false)
     private Sensor sensor;

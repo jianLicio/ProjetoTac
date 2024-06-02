@@ -1,12 +1,13 @@
 package utfpr.edu.br.t_a_c.projeto_t_a_c.model;
 
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -21,7 +22,7 @@ import lombok.Data;
 @Table(name = "tb_pessoa")
 @Data
 public class Pessoa {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -39,6 +40,7 @@ public class Pessoa {
     private LocalDate dataNascimento;
 
     @OneToMany(mappedBy = "pessoa")
+    @JsonManagedReference
     private List<Gateway> gateways;
 
     @Column(nullable = false, updatable = false)

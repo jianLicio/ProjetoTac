@@ -6,6 +6,8 @@ import java.util.List;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -34,6 +36,7 @@ public class Dispositivo {
     @Column(nullable = false)
     private String localizacao;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "gateway_id", nullable = false)
     private Gateway gateway;
