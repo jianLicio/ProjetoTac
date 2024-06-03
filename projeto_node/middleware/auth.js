@@ -1,11 +1,14 @@
 const jwt = require('jsonwebtoken');
 
-function auth(req, res, next) {
-  const token = req.header('Authorization');
-  if (!token) return res.status(401).send('Acesso negado. TOKEN não validado.');
+function authenticateToken(req, res, next) {
+  const authHeader = req.header('Authorization');
+  if (!authHeader) return res.status(401).send('Acesso negado. TOKEN não fornecido.');
+
+  const token = authHeader.split(' ')[1]; // Extrai o token do formato "Bearer <token>"
+  if (!token) return res.status(401).send('Acesso negado. TOKEN inválido.');
 
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const decoded = jwt.verify(authHeader, process.env.JWT_SECRET);
     req.user = decoded;
     next();
   } catch (ex) {
@@ -13,4 +16,4 @@ function auth(req, res, next) {
   }
 }
 
-module.exports = auth;
+module.exports = authenticateToken;
