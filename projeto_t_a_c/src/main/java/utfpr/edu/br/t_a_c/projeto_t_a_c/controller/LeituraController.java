@@ -67,9 +67,11 @@ public class LeituraController {
     public ResponseEntity<Object> delete(@PathVariable("id") long id) {
         try {
             leituraService.delete(id);
-            return ResponseEntity.ok().build();
+            return ResponseEntity.ok("Leitura deletado com sucesso!");
+
         } catch (NotFoundException ex) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+            
         } catch (Exception ex) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
         }
