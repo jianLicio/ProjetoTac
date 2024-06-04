@@ -12,12 +12,10 @@ import jakarta.validation.constraints.Size;
 
 public record PessoaDTO(
 
-                @NotBlank @Size(min = 1, max = 100) String nome,
-                @NotBlank @Email String email,
-                @NotBlank @Size(min = 8, max = 100) String senha,
-                @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss") LocalDateTime dataNascimento,
-                @JsonProperty("atualizado_em") @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss") LocalDateTime atualizadoEm,
-                List<Long> gatewayId) {
-
-    
+        @NotBlank @Size(min = 1, max = 100) String nome,
+        @NotBlank @Email String email,
+        @NotBlank @Size(min = 8, max = 100) String senha,
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss") LocalDateTime dataNascimento,
+        @JsonProperty("atualizado_em") @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss") LocalDateTime atualizadoEm,
+        List<Long> gatewayId) {
 }
