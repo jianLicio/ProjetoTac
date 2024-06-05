@@ -7,6 +7,6 @@ import utfpr.edu.br.t_a_c.projeto_t_a_c.model.Pessoa;
 
 @Repository
 public interface PessoaRepository
-        extends JpaRepository<Pessoa, Long> {
-
+                extends JpaRepository<Pessoa, Long> {
+        Pessoa findByEmail(String email);
 }

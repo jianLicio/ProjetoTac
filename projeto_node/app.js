@@ -24,6 +24,7 @@ connectWithRetry();
 
 app.use(express.json());
 app.use('/events', apiNode);
+app.use(bodyParser.json());
 
 app.get('/test-connection', async (req, res) => {
   try {
