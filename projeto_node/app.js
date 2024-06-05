@@ -1,6 +1,5 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const eventsRouter = require('./routes/events');
 require('dotenv').config();
 
 const app = express();
@@ -24,7 +23,6 @@ connectWithRetry();
 
 app.use(express.json());
 app.use('/events', apiNode);
-app.use(bodyParser.json());
 
 app.get('/test-connection', async (req, res) => {
   try {
@@ -39,4 +37,17 @@ app.get('/test-connection', async (req, res) => {
 });
 
 const port = process.env.PORT || 3000;
-app.listen(port, () => console.log(`Conectado à porta ${port}...`));
+
+
+const server = app.listen(port, () => {
+  console.log(`Servidor rodando na porta ${port}`);
+});
+
+server.on('error', (err) => {
+  if (err.code === 'EADDRINUSE') {
+    console.error(`Porta ${port} já está em uso. Não foi possível iniciar o servidor.`);
+    process.exit(1);
+  } else {
+    console.error('Erro ao iniciar o servidor:', err);
+  }
+});
