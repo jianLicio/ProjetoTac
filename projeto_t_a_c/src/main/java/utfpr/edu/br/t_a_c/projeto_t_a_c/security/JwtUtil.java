@@ -32,6 +32,9 @@ public class JwtUtil {
     }
 
     private Boolean isTokenExpired(String token) {
+        Date expiration = extractExpiration(token);
+        System.out.println("Token expiration time: " + expiration);
+        System.out.println("Current time: " + new Date());
         return extractExpiration(token).before(new Date());
     }
 
@@ -41,7 +44,7 @@ public class JwtUtil {
 
     private String createToken(String subject) {
         return Jwts.builder().setSubject(subject).setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24 * 1000))
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24)) //DURA 24 HORAS
                 .signWith(SignatureAlgorithm.HS256, SECRET_KEY).compact();
     }
 

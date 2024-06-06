@@ -3,6 +3,7 @@ package utfpr.edu.br.t_a_c.projeto_t_a_c.security;
 import java.io.IOException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -20,6 +21,7 @@ import jakarta.servlet.http.HttpServletResponse;
 public class JwtRequestFilter extends OncePerRequestFilter {
 
     @Autowired
+    @Lazy
     private UserDetailsService userDetailsService;
 
     @Autowired
@@ -53,10 +55,14 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             if (jwtUtil.validateToken(jwt, userDetails.getUsername())) {
 
                 UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
-                        userDetails, null, userDetails.getAuthorities());
+                        userDetails, null, userDetails
+                                .getAuthorities());
                 usernamePasswordAuthenticationToken
-                        .setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
+                        .setDetails(new WebAuthenticationDetailsSource()
+                                .buildDetails(request));
+                SecurityContextHolder
+                        .getContext()
+                        .setAuthentication(usernamePasswordAuthenticationToken);
             }
         }
         chain.doFilter(request, response);
