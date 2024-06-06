@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -33,18 +34,17 @@ public class PessoaController {
 
             return ResponseEntity.status(HttpStatus.CREATED).body(res);
         } catch (Exception ex) {
-
             return ResponseEntity.badRequest().body(ex.getMessage());
         }
     }
 
     @GetMapping
-    public List<Pessoa> getAll() {
+    public List<Pessoa> getAll(Authentication authentication) {
         return pessoaService.getAll();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Object> getById(@PathVariable("id") long id) {
+    public ResponseEntity<Object> getById(@PathVariable("id") long id, Authentication authentication) {
         var pessoa = pessoaService.getById(id);
 
         return pessoa.isPresent()

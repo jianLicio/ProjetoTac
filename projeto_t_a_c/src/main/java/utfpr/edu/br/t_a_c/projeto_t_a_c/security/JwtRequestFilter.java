@@ -44,7 +44,6 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                 response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Token JWT Inválido");
                 return;
             }
-
         }
 
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {

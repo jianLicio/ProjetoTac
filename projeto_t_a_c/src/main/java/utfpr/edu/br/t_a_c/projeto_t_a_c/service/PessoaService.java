@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import utfpr.edu.br.t_a_c.projeto_t_a_c.dto.PessoaDTO;
@@ -18,14 +19,18 @@ public class PessoaService {
     @Autowired
     private PessoaRepository pessoaRepository;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     public Pessoa create(PessoaDTO dto) {
         var pessoa = new Pessoa();
         BeanUtils.copyProperties(dto, pessoa);
+        pessoa.setSenha(passwordEncoder.encode(dto.senha()));
 
         return pessoaRepository.save(pessoa);
     }
 
-    public List<Pessoa> getAll() { 
+    public List<Pessoa> getAll() {
         return pessoaRepository.findAll();
     }
 
@@ -44,6 +49,10 @@ public class PessoaService {
         pessoa.setNome(dto.nome());
         pessoa.setEmail(dto.email());
 
+        if (dto.senha() != null && !dto.senha().isEmpty()) {
+            pessoa.setSenha(passwordEncoder.encode(dto.senha()));
+        }
+        
         return pessoaRepository.save(pessoa);
     }
 
