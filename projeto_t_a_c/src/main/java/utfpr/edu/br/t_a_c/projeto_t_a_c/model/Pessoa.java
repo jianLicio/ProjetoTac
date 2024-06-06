@@ -37,8 +37,6 @@ public class Pessoa {
     @Column(nullable = false)
     private String senha;
 
-    private boolean encrypted = false;
-
     @Column(name = "data_nascimento")
     private LocalDate dataNascimento;
 
