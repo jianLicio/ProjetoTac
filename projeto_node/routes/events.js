@@ -4,12 +4,12 @@ const Event = require('../models/event');
 const app = express();
 const authenticateToken = require('../middleware/auth');
 const axios = require('axios');
-// const urlJava = process.env.API_JAVA;
 const urlNode = process.env.API_NODE;
+
 router.use(express.json());
 router.use(authenticateToken);
 
-
+ 
 
 
 router.get('/', async (req, res) => {
@@ -33,7 +33,6 @@ router.get('/:id', async (req, res) => {
 
 router.post('/', async (req, res) => {
   const event = new Event({
-
     type: req.body.type,
     timestamp: req.body.timestamp,
     device: req.body.device,
@@ -47,13 +46,20 @@ router.post('/', async (req, res) => {
   });
 
   try {
+    console.log('Recebendo evento:', req.body);
+    const newEvent = await event.save();
+    console.log('Evento salvo:', newEvent);
+
     const response = await axios.post(`${urlNode}/events`, req.body);
     res.status(response.status).send(response.data);
 
-    // const newEvent = await event.save();
-    // res.status(201).json(newEvent);
+    res.status(201).json(newEvent);
+
   } catch (err) {
+
+    console.error('Erro ao salvar evento:', err);
     res.status(400).json({ message: err.message });
+
   }
 });
 

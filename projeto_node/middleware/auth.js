@@ -33,22 +33,45 @@ const eventSchema = new mongoose.Schema({
 const Event = mongoose.model('Evento', eventSchema);
 
 function authenticateToken(req, res, next) {
-  const authHeader = req.header('Authorization');
-  if (!authHeader) return res.status(401).send('Acesso negado. TOKEN não fornecido.');
+  const authHeader = req.headers['authorization'];
+
+  if (!authHeader) {
+    console.error('Acesso negado. TOKEN não fornecido.');
+    return res.status(401).send('Acesso negado. TOKEN não fornecido.');
+  }
 
   const token = authHeader.split(' ')[1];
-  if (!token) return res.status(401).send('Acesso negado. TOKEN inválido.');
+  if (!token) {
+    console.error('Acesso negado. TOKEN inválido.');
+    return res.status(401).send('Acesso negado. TOKEN inválido.');
+  }
 
   try {
-    const decoded = jwt.verify(authHeader, process.env.JWT_SECRET);
+    console.log('Verificando token:', token);
+
+    const decoded = jwt.verify(token, process.env.JWT_SECRET, { algorithms: ['HS256'] });
     req.user = decoded;
+    console.log('Token verificado com sucesso:', decoded);
     next();
-  } catch (ex) {
-    res.status(400).send('Token Invalido.');
+  } catch (err) {
+    if (err.name === 'TokenExpiredError') {
+      console.error('Token expirado:', err.message);
+      return res.status(401).send('Token expirado.');
+    } else if (err.name === 'JsonWebTokenError') {
+      console.error('Token malformado ou assinatura inválida:', err.message);
+      return res.status(400).send('Token malformado ou assinatura inválida.');
+    } else if (err.name === 'NotBeforeError') {
+      console.error('Token usado antes de estar válido:', err.message);
+      return res.status(400).send('Token usado antes de estar válido.');
+    } else {
+      console.error('Erro desconhecido na verificação do token:', err.message);
+      return res.status(400).send('Token Invalido.');
+    }
   }
+
 }
 
-app.post('/evento', authenticateToken, async (req, res) => {
+app.post('/events', authenticateToken, async (req, res) => {
 
   try {
     const event = new Event(req.body);
@@ -59,21 +82,6 @@ app.post('/evento', authenticateToken, async (req, res) => {
     res.status(500).send('Erro ao salvar evento: ' + err.message);
   }
 
-});
-
-const port = process.env.PORT || 3000;
-
-const server = app.listen(port, () => {
-  console.log(`Servidor rodando na porta ${port}`);
-});
-
-server.on('error', (err) => {
-  if (err.code === 'EADDRINUSE') {
-    console.error(`Porta ${port} já está em uso. Não foi possível iniciar o servidor.`);
-    process.exit(1);
-  } else {
-    console.error('Erro ao iniciar o servidor:', err);
-  }
 });
 
 module.exports = authenticateToken;

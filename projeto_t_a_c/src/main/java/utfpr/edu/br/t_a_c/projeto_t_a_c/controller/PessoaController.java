@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import utfpr.edu.br.t_a_c.projeto_t_a_c.dto.PessoaDTO;
+import utfpr.edu.br.t_a_c.projeto_t_a_c.eventService.EventoService;
 import utfpr.edu.br.t_a_c.projeto_t_a_c.exception.NotFoundException;
 import utfpr.edu.br.t_a_c.projeto_t_a_c.model.Pessoa;
 import utfpr.edu.br.t_a_c.projeto_t_a_c.service.PessoaService;
@@ -27,10 +28,15 @@ public class PessoaController {
     @Autowired
     private PessoaService pessoaService;
 
+    @Autowired
+    private EventoService eventoService;
+
     @PostMapping
     public ResponseEntity<Object> create(@RequestBody PessoaDTO dto) {
         try {
             var res = pessoaService.create(dto);
+
+            eventoService.emitirEvento("POST", "/pessoa", res);
 
             return ResponseEntity.status(HttpStatus.CREATED).body(res);
         } catch (Exception ex) {
@@ -55,10 +61,16 @@ public class PessoaController {
     @PutMapping("/{id}")
     public ResponseEntity<Object> update(@PathVariable long id,
             @RequestBody PessoaDTO dto) {
+
         try {
+
+            var updatedPessoa = pessoaService.update(id, dto);
+            eventoService.emitirEvento("PUT", "/pessoa/" + id, updatedPessoa);
             return ResponseEntity.ok().body(pessoaService.update(id, dto));
+
         } catch (NotFoundException ex) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+
         } catch (Exception ex) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
         }

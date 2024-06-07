@@ -41,7 +41,6 @@ utfpr\edu\br\t_a_c\projeto_t_a_c\repository\DispositivoRepository.class
 utfpr\edu\br\t_a_c\projeto_t_a_c\controller\DispositivoController.class
 utfpr\edu\br\t_a_c\projeto_t_a_c\dto\SensorDTO.class
 utfpr\edu\br\t_a_c\projeto_t_a_c\service\PessoaService.class
-utfpr\edu\br\t_a_c\projeto_t_a_c\migracao\PasswordMigration.class
 utfpr\edu\br\t_a_c\projeto_t_a_c\model\Atuador.class
 utfpr\edu\br\t_a_c\projeto_t_a_c\model\Leitura.class
 utfpr\edu\br\t_a_c\projeto_t_a_c\controller\LeituraController.class

@@ -20,3 +20,17 @@ app.get('/test-connection', async (req, res) => {
     res.status(500).json({ message: 'Erro ao conectar ao banco de dados', error: err.message });
   }
 });
+
+const PORT = process.env.PORT || 3001;
+const server = app.listen(PORT, () => {
+  console.log(`Servidor rodando na porta ${PORT}`);
+});
+
+server.on('error', (err) => {
+  if (err.code === 'EADDRINUSE') {
+    console.error(`Porta ${port} já está em uso. Não foi possível iniciar o servidor.`);
+    process.exit(1);
+  } else {
+    console.error('Erro ao iniciar o servidor:', err);
+  }
+});

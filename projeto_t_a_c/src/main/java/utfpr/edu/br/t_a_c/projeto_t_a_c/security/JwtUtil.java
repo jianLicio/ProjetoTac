@@ -38,14 +38,21 @@ public class JwtUtil {
         return extractExpiration(token).before(new Date());
     }
 
-    public String generateToken(String username) {
-        return createToken(username);
+    public String generateToken(String email) {
+        return createToken(email);
     }
 
     private String createToken(String subject) {
-        return Jwts.builder().setSubject(subject).setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24)) //DURA 24 HORAS
-                .signWith(SignatureAlgorithm.HS256, SECRET_KEY).compact();
+
+        return Jwts.builder()
+                .setSubject(subject)
+                .setIssuedAt(new Date(System
+                        .currentTimeMillis()))
+                .setExpiration(new Date(System
+                        .currentTimeMillis() + 1000 * 60 * 60 * 24)) // DURA 24 HORAS
+                .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
+                .compact();
+
     }
 
     public Boolean validateToken(String token, String username) {
