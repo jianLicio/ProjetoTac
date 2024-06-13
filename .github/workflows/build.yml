@@ -39,6 +39,6 @@ jobs:
 
       - name: Build and analyze
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
-          SONAR_TOKEN: f14ad251625edc75b8fe3ea3c4b7556e9d18783b
+          GITHUB_TOKEN: 5c0e8b1d5fc9d4e648644b85eea514b9e3a6c1b7  # Needed to get PR information, if any
+          SONAR_TOKEN: 5c0e8b1d5fc9d4e648644b85eea514b9e3a6c1b7
         run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=jianLicio_ProjetoTac
