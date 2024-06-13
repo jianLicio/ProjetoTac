@@ -3,6 +3,8 @@ package utfpr.edu.br.t_a_c.projeto_t_a_c.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.graphql.data.method.annotation.Argument;
+import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -32,7 +34,8 @@ public class PessoaController {
     private EventoService eventoService;
 
     @PostMapping
-    public ResponseEntity<Object> create(@RequestBody PessoaDTO dto) {
+    @QueryMapping //PARA GRAPHQL
+    public ResponseEntity<Object> create(@Argument @RequestBody PessoaDTO dto) {
         try {
             var res = pessoaService.create(dto);
 

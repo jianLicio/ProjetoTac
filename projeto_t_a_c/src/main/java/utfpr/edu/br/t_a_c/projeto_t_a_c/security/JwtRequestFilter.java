@@ -29,28 +29,33 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
     @SuppressWarnings("null")
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
+    protected void doFilterInternal(HttpServletRequest request,
+            HttpServletResponse response,
+            FilterChain chain)
             throws ServletException, IOException {
 
         final String authorizationHeader = request.getHeader("Authorization");
 
-        String username = null;
+        String email = null;
         String jwt = null;
 
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
             jwt = authorizationHeader.substring(7);
 
             try {
-                username = jwtUtil.extractUsername(jwt);
+                email = jwtUtil.extractEmail(jwt);
             } catch (Exception e) {
                 response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Token JWT Inválido");
                 return;
             }
         }
 
-        if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+        if (email != null &&
+                SecurityContextHolder
+                        .getContext()
+                        .getAuthentication() == null) {
 
-            UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
+            UserDetails userDetails = this.userDetailsService.loadUserByUsername(email);
 
             if (jwtUtil.validateToken(jwt, userDetails.getUsername())) {
 

@@ -6,15 +6,19 @@ import java.util.Optional;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
+import graphql.kickstart.tools.GraphQLMutationResolver;
+import graphql.kickstart.tools.GraphQLQueryResolver;
 import utfpr.edu.br.t_a_c.projeto_t_a_c.dto.PessoaDTO;
 import utfpr.edu.br.t_a_c.projeto_t_a_c.exception.NotFoundException;
 import utfpr.edu.br.t_a_c.projeto_t_a_c.model.Pessoa;
 import utfpr.edu.br.t_a_c.projeto_t_a_c.repository.PessoaRepository;
 
 @Service
-public class PessoaService {
+@Component
+public class PessoaService implements GraphQLQueryResolver, GraphQLMutationResolver {
 
     @Autowired
     private PessoaRepository pessoaRepository;
@@ -29,11 +33,14 @@ public class PessoaService {
 
         return pessoaRepository.save(pessoa);
     }
-
+ 
     public List<Pessoa> getAll() {
-        return pessoaRepository.findAll();
+        List<Pessoa> pessoas = pessoaRepository.findAll();
+        System.out.println("Pessoas recuperadas: " + pessoas);
+        return pessoas;
+        // return pessoaRepository.findAll();
     }
-
+    
     public Optional<Pessoa> getById(long id) {
         return pessoaRepository.findById(id);
     }
@@ -52,7 +59,7 @@ public class PessoaService {
         if (dto.senha() != null && !dto.senha().isEmpty()) {
             pessoa.setSenha(passwordEncoder.encode(dto.senha()));
         }
-        
+
         return pessoaRepository.save(pessoa);
     }
 
@@ -67,3 +74,4 @@ public class PessoaService {
     }
 
 }
+
