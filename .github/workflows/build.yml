@@ -1,9 +1,10 @@
-name: SonarCloud
+name: SonarQube Build and Analyze
 
 on:
   push:
     branches:
       - jian
+      - GraphQL
   pull_request:
     types: [opened, synchronize, reopened]
 
@@ -13,10 +14,16 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
 
+      - uses: sonarsource/sonarqube-scan-action@master
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+
+      # Setup Java environment
       - name: Set up JDK 17
         uses: actions/setup-java@v3
         with:
@@ -37,8 +44,32 @@ jobs:
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
 
-      - name: Build and analyze
+      - name: Build and analyze Java project
         env:
-          GITHUB_TOKEN: 5c0e8b1d5fc9d4e648644b85eea514b9e3a6c1b7  # Needed to get PR information, if any
-          SONAR_TOKEN: 5c0e8b1d5fc9d4e648644b85eea514b9e3a6c1b7
-        run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=jianLicio_ProjetoTac -Dsonar.organization=jianlicio
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+        run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=projetoTac -Dsonar.projectName='projetoTac'
+
+      # Setup Node.js environment
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '22.2.0' # Specify the Node.js version
+
+      - name: Cache Node.js modules
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: ${{ runner.os }}-npm
+
+      # Install Node.js dependencies
+      - name: Install Node.js dependencies
+        run: npm install
+
+      # Build and analyze Node.js project
+      - name: Build and analyze Node.js project
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+        run: npm run build && sonar-scanner -Dsonar.projectKey=projetoTac-node -Dsonar.projectName='projetoTac Node' -Dsonar.sourceEncoding=UTF-8 -Dsonar.sources=.
