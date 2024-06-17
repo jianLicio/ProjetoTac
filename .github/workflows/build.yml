@@ -43,7 +43,7 @@ jobs:
       - name: Build and analyze Java project
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=your_sonar_project_key_for_api1 -Dsonar.projectName=API1-SpringBoot -Dsonar.sources=src/main/java
+        run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=jianLicio_ProjetoTac -Dsonar.projectName=ProjetoTac -Dsonar.sources=src/main/java
 
   build-api2:
     name: Build and analyze API2-Express
@@ -81,4 +81,4 @@ jobs:
       - name: Build and analyze Node.js project
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: npm run build && sonar-scanner -Dsonar.projectKey=your_sonar_project_key_for_api2 -Dsonar.projectName=API2-Express -Dsonar.sources=src -Dsonar.sourceEncoding=UTF-8
+        run: npm run build && sonar-scanner -Dsonar.projectKey=jianLicio_ProjetoTac -Dsonar.projectName=ProjetoTac -Dsonar.sources=src -Dsonar.sourceEncoding=UTF-8
