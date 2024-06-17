@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - jian
+      - GraphQL
   pull_request:
     types: [opened, synchronize, reopened]
 jobs:
