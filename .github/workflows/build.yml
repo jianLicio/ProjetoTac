@@ -48,7 +48,7 @@ jobs:
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
-        run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=projetoTac -Dsonar.projectName='projetoTac'
+        run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=ProjetoTac_2024 -Dsonar.projectName='ProjetoTac_2024'
 
       # Setup Node.js environment
       - name: Set up Node.js
@@ -72,4 +72,4 @@ jobs:
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
-        run: npm run build && sonar-scanner -Dsonar.projectKey=projetoTac-node -Dsonar.projectName='projetoTac Node' -Dsonar.sourceEncoding=UTF-8 -Dsonar.sources=.
+        run: npm run build && sonar-scanner -Dsonar.projectKey=ProjetoTac_2024 -Dsonar.projectName='projetoTac Node' -Dsonar.sourceEncoding=UTF-8 -Dsonar.sources=.
