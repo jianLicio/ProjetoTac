@@ -18,6 +18,8 @@ jobs:
         with:
           fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
 
+    - name: Set up environment
+      run: echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> $GITHUB_ENV
       # - uses: sonarsource/sonarqube-scan-action@master
       #   env:
       #     SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
@@ -54,7 +56,7 @@ jobs:
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           # SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
-        run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=ProjetoTac_2024 -Dsonar.projectName='ProjetoTac_2024'
+        run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=${{ env.PROJECT_KEY }} -Dsonar.projectName='${{ env.PROJECT_KEY }}'
 
       # Setup Node.js environment
       - name: Set up Node.js
@@ -78,4 +80,4 @@ jobs:
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           # SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
-        run: npm run build && sonar-scanner -Dsonar.projectKey=ProjetoTac_2024 -Dsonar.projectName='projetoTac Node' -Dsonar.sourceEncoding=UTF-8 -Dsonar.sources=.
+        run: npm run build && sonar-scanner -Dsonar.projectKey=${{ env.PROJECT_KEY }} -Dsonar.projectName='projetoTac Node' -Dsonar.sourceEncoding=UTF-8 -Dsonar.sources=.
