@@ -14,16 +14,22 @@ services:
   mariadb:
     image: mariadb:latest
     environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-      MYSQL_DATABASE: ${MYSQL_DATABASE}
-      MYSQL_USER: ${MYSQL_USER}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MARIADB_ALLOW_EMPTY_ROOT_PASSWORD: "yes"
+      MARIADB_DATABASE: ${MARIADB_DATABASE}
+      MARIADB_USER: ${MARIADB_USER}
+      MARIADB_PASSWORD: ""
     ports:
-      - "3307:3306"
+      - "3306:3306"
     volumes:
       - mariadb-data:/var/lib/mysql
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
     networks:
       - app-network
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
 
   postgres:
     image: postgres:latest
@@ -43,9 +49,9 @@ services:
     ports:
       - "8080:8080"
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mariadb://mariadb:3306/${MYSQL_DATABASE}
-      SPRING_DATASOURCE_USERNAME: ${MYSQL_USER}
-      SPRING_DATASOURCE_PASSWORD: ${MYSQL_PASSWORD}
+      SPRING_DATASOURCE_URL: jdbc:mariadb://mariadb:3306/${MARIADB_DATABASE}
+      SPRING_DATASOURCE_USERNAME: ${MARIADB_USER}
+      SPRING_DATASOURCE_PASSWORD: ${MARIADB_PASSWORD}
       SPRING_DATASOURCE_DRIVER_CLASS_NAME: org.mariadb.jdbc.Driver
     depends_on:
       - mariadb
@@ -63,7 +69,7 @@ services:
 
   sonarqube:
     image: sonarqube:latest
-    container_name: sonarqube
+    container_name: ${SONARQUBE_CONTAINER_NAME}
     ports:
       - "9000:9000"
     environment:
@@ -73,6 +79,7 @@ services:
     depends_on:
       - postgres
     networks:
+      - app-network
       - sonar_network
     volumes:
       - sonarqube_conf:/opt/sonarqube/conf
