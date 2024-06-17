@@ -18,18 +18,18 @@ jobs:
         with:
           fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
 
-    - name: Set up environment
-      run: echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> $GITHUB_ENV
-      # - uses: sonarsource/sonarqube-scan-action@master
-      #   env:
-      #     SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-      #     SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+      - name: Set up environment
+        run: echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> $GITHUB_ENV
+        # - uses: sonarsource/sonarqube-scan-action@master
+        #   env:
+        #     SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        #     SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
 
-      - name: SonarCloud Scan
-        uses: SonarSource/sonarcloud-github-action@master
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        - name: SonarCloud Scan
+          uses: SonarSource/sonarcloud-github-action@master
+          env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
+            SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
       # Setup Java environment
       - name: Set up JDK 17
