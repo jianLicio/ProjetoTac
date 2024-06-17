@@ -14,14 +14,20 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v3
         with:
           fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
 
-      - uses: sonarsource/sonarqube-scan-action@master
+      # - uses: sonarsource/sonarqube-scan-action@master
+      #   env:
+      #     SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      #     SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@master
         env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
 
       # Setup Java environment
       - name: Set up JDK 17
@@ -47,7 +53,7 @@ jobs:
       - name: Build and analyze Java project
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+          # SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
         run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=ProjetoTac_2024 -Dsonar.projectName='ProjetoTac_2024'
 
       # Setup Node.js environment
@@ -71,5 +77,5 @@ jobs:
       - name: Build and analyze Node.js project
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+          # SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
         run: npm run build && sonar-scanner -Dsonar.projectKey=ProjetoTac_2024 -Dsonar.projectName='projetoTac Node' -Dsonar.sourceEncoding=UTF-8 -Dsonar.sources=.
