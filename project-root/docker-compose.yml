@@ -47,11 +47,11 @@ services:
   api1:
     build: ./api1-springboot
     ports:
-      - "8080:8080"
+      - "8081:8180"
     environment:
       SPRING_DATASOURCE_URL: jdbc:mariadb://mariadb:3306/${MARIADB_DATABASE}
       SPRING_DATASOURCE_USERNAME: ${MARIADB_USER}
-      SPRING_DATASOURCE_PASSWORD: ${MARIADB_PASSWORD}
+      SPRING_DATASOURCE_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
       SPRING_DATASOURCE_DRIVER_CLASS_NAME: org.mariadb.jdbc.Driver
     depends_on:
       - mariadb

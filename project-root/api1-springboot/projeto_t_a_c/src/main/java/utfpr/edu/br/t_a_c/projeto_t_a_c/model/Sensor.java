@@ -6,7 +6,8 @@ import java.util.List;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -34,12 +35,13 @@ public class Sensor {
     @Column(nullable = false)
     private String descricao;
 
-    @JsonIgnore
     @ManyToOne
+    @JsonBackReference
     @JoinColumn(name = "dispositivo_id", nullable = false)
     private Dispositivo dispositivo;
 
     @OneToMany(mappedBy = "sensor", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private List<Leitura> leituras;
 
     @Column(nullable = false, updatable = false)

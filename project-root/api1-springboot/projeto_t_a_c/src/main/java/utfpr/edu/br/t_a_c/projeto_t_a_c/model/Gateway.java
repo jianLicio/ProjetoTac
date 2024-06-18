@@ -6,7 +6,8 @@ import java.util.List;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -35,12 +36,13 @@ public class Gateway {
     @Column(nullable = false)
     private String localizacao;
 
-    @JsonIgnore
     @ManyToOne
+    @JsonBackReference
     @JoinColumn(name = "pessoa_id", nullable = false)
     private Pessoa pessoa;
 
     @OneToMany(mappedBy = "gateway", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private List<Dispositivo> dispositivos;
 
     @Column(nullable = false, updatable = false)

@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -31,8 +31,8 @@ public class Atuador {
     @Column(nullable = false)
     private String descricao;
 
-    @JsonIgnore
     @ManyToOne
+    @JsonBackReference
     @JoinColumn(name = "dispositivo_id", nullable = false)
     private Dispositivo dispositivo;
 

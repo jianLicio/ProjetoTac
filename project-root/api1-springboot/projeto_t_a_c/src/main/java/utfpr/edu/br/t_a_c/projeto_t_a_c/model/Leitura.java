@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -28,8 +28,9 @@ public class Leitura {
     @Column(nullable = false)
     private String valor;
 
-    @JsonIgnore
+    // @JsonIgnore
     @ManyToOne
+    @JsonBackReference
     @JoinColumn(name = "sensor_id", nullable = false)
     private Sensor sensor;
 
