@@ -14,8 +14,8 @@ public class GraphQLConfig {
         try {
 
             return SchemaParser.newParser()
-                    .files("graphql/schema.graphqls") // Certifique-se de que este caminho está correto
-                    .resolvers(pessoaDataFetcher) // Adiciona o data fetcher
+                    .files("graphql/schema.graphqls")
+                    .resolvers(pessoaDataFetcher)
                     .build()
                     .makeExecutableSchema();
         } catch (Exception e) {
