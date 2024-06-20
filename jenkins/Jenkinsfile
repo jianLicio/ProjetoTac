@@ -1,22 +1,21 @@
-pipeline{
-    agent none {
+pipeline {
+    agent none
         stages {
-            stage('Build'){
+            stage('Build') {
                 agent {
-                    docker {image 'maven'}
+                    docker { image 'maven' }
                 }
-                steps{
-                    sh "mvn package Dmaven.test.skip=true"
+                steps {
+                    sh 'mvn package Dmaven.test.skip=true'
                 }
             }
-            stage('Test'){
+            stage('Test') {
                 agent {
-                    docker {image 'maven'}
+                    docker { image 'maven' }
                 }
-                steps{
-                    sh "mvn clean install"
+                steps {
+                    sh 'mvn clean install'
                 }
             }
         }
-    }
 }
