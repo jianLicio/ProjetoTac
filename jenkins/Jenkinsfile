@@ -1,23 +1,19 @@
 pipeline {
     agent any
+
     stages {
-        stage('Build') {
+        stage('Build and Test') {
             steps {
                 script {
-                    docker.image('maven:3.9.5-openjdk-17').inside('-v /var/run/docker.sock:/var/run/docker.sock') {
+                    def mavenImage = 'maven:3.9.5-openjdk-17'
+                    
+                    docker.image(mavenImage).inside('-v /var/run/docker.sock:/var/run/docker.sock') {
                         // Verificar a versão do Maven
                         sh 'mvn --version'
 
                         // Compilar e empacotar o projeto
                         sh 'mvn package -Dmaven.test.skip=true'
-                    }
-                }
-            }
-        }
-        stage('Test') {
-            steps {
-                script {
-                    docker.image('maven:3.9.5-openjdk-17').inside('-v /var/run/docker.sock:/var/run/docker.sock') {
+
                         // Executar os testes do projeto
                         sh 'mvn clean install'
                     }
@@ -26,6 +22,35 @@ pipeline {
         }
     }
 }
+
+// pipeline {
+//     agent any
+//     stages {
+//         stage('Build') {
+//             steps {
+//                 script {
+//                     docker.image('maven:3.9.5-openjdk-17').inside('-v /var/run/docker.sock:/var/run/docker.sock') {
+//                         // Verificar a versão do Maven
+//                         sh 'mvn --version'
+
+//                         // Compilar e empacotar o projeto
+//                         sh 'mvn package -Dmaven.test.skip=true'
+//                     }
+//                 }
+//             }
+//         }
+//         stage('Test') {
+//             steps {
+//                 script {
+//                     docker.image('maven:3.9.5-openjdk-17').inside('-v /var/run/docker.sock:/var/run/docker.sock') {
+//                         // Executar os testes do projeto
+//                         sh 'mvn clean install'
+//                     }
+//                 }
+//             }
+//         }
+//     }
+// }
 // pipeline {
 //     agent none
 //         stages {
