@@ -1,21 +1,49 @@
+// pipeline {
+//     agent none
+//         stages {
+//             stage('Build') {
+//                 agent {
+//                     docker { image 'maven' }
+//                 }
+//                 steps {
+//                     sh 'mvn package Dmaven.test.skip=true'
+//                 }
+//             }
+//             stage('Test') {
+//                 agent {
+//                     docker { image 'maven' }
+//                 }
+//                 steps {
+//                     sh 'mvn clean install'
+//                 }
+//             }
+//         }
+// }
+
 pipeline {
     agent none
-        stages {
-            stage('Build') {
-                agent {
-                    docker { image 'maven' }
-                }
-                steps {
-                    sh 'mvn package Dmaven.test.skip=true'
+    stages {
+        stage('Build') {
+            agent {
+                docker {
+                    image 'maven:3.9.5-openjdk-17'
+                    args '-v /var/run/docker.sock:/var/run/docker.sock'
                 }
             }
-            stage('Test') {
-                agent {
-                    docker { image 'maven' }
-                }
-                steps {
-                    sh 'mvn clean install'
-                }
+            steps {
+                sh 'mvn package -Dmaven.test.skip=true'
             }
         }
+        stage('Test') {
+            agent {
+                docker {
+                    image 'maven:3.9.5-openjdk-17'
+                    args '-v /var/run/docker.sock:/var/run/docker.sock'
+                }
+            }
+            steps {
+                sh 'mvn clean install'
+            }
+        }
+    }
 }
