@@ -1,101 +1,56 @@
 pipeline {
     agent any
 
-    environment {
-        POM_VERSION = ""
-    }
-
     stages {
-        stage('Build') {
-            agent {
-                docker { image 'maven' }
-            }
-            steps {
-                sh "mvn package -Dmaven.test.skip=true"
-                script {
-                    pom = readMavenPom file: 'pom.xml'
-                    POM_VERSION = pom.version
-                }
-                stash 'source'
-            }
-        }
-
-        stage('Docker build') {
-            steps {
-                unstash 'source'
-                sh "docker build . -t netodevel/netodevel-api:${POM_VERSION}"
-            }
-        }
-
-        stage('Docker push to registry') {
+        stage('Load Environment') {
             steps {
                 script {
-                    withCredentials([string(credentialsId: 'docker_hub_pat',variable: 'dockerHubPat')]) {
-                        sh "docker login -u netodevel -p ${dockerHubPat}"
-                        sh "docker push netodevel/netodevel-api:${POM_VERSION}"
+                    // Carregar o arquivo .env e definir as variáveis de ambiente
+                    def envFile = readFile('.env')
+                    def envVars = envFile.split('\n')
+                    envVars.each { line ->
+                        def parts = line.split('=')
+                        if (parts.length == 2) {
+                            def key = parts[0].trim()
+                            def value = parts[1].trim()
+                            env[key] = value
+                        }
                     }
                 }
             }
         }
-
-        stage('Apply Kubernetes files') {
+        stage('Build') {
             steps {
-                withKubeConfig([credentialsId: 'kind-cluster-config', serverUrl: 'https://127.0.0.1:35433']) {
-                  sh 'kubectl apply -f k8s'
-                  sh 'kubectl rollout restart deployment netodevel-api'
+                script {
+                    def mavenImage = 'maven:3.9.5-openjdk-17'
+                    
+                    docker.image(mavenImage).inside('-v /var/run/docker.sock:/var/run/docker.sock') {
+                        // Verificar a versão do Maven
+                        sh 'mvn --version'
+
+                        // Compilar e empacotar o projeto
+                        sh 'mvn package -Dmaven.test.skip=true'
+                    }
+                }
+            }
+        }
+        stage('Test') {
+            steps {
+                script {
+                    def mavenImage = 'maven:3.9.5-openjdk-17'
+                    
+                    docker.image(mavenImage).inside('-v /var/run/docker.sock:/var/run/docker.sock') {
+                        // Utilizar o JWT para autenticar a API
+                        sh '''#!/bin/bash
+                            curl -H "Authorization: Bearer ${JWT_TOKEN}" \
+                            -X POST https://api.example.com/test
+                        '''
+
+                        // Executar os testes do projeto
+                        sh 'mvn clean install'
+                    }
                 }
             }
         }
     }
 }
-
-// pipeline {
-//     agent any
-//     stages {
-//         stage('Build') {
-//             steps {
-//                 script {
-//                     docker.image('maven:3.9.5-openjdk-17').inside('-v /var/run/docker.sock:/var/run/docker.sock') {
-//                         // Verificar a versão do Maven
-//                         sh 'mvn --version'
-
-//                         // Compilar e empacotar o projeto
-//                         sh 'mvn package -Dmaven.test.skip=true'
-//                     }
-//                 }
-//             }
-//         }
-//         stage('Test') {
-//             steps {
-//                 script {
-//                     docker.image('maven:3.9.5-openjdk-17').inside('-v /var/run/docker.sock:/var/run/docker.sock') {
-//                         // Executar os testes do projeto
-//                         sh 'mvn clean install'
-//                     }
-//                 }
-//             }
-//         }
-//     }
-// }
-// pipeline {
-//     agent none
-//         stages {
-//             stage('Build') {
-//                 agent {
-//                     docker { image 'maven' }
-//                 }
-//                 steps {
-//                     sh 'mvn package Dmaven.test.skip=true'
-//                 }
-//             }
-//             stage('Test') {
-//                 agent {
-//                     docker { image 'maven' }
-//                 }
-//                 steps {
-//                     sh 'mvn clean install'
-//                 }
-//             }
-//         }
-// }
-
