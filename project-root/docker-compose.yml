@@ -96,6 +96,7 @@ services:
       - jenkins_home:/var/jenkins_home
       - /var/run/docker.sock:/var/run/docker.sock
       - "C:/Program Files/Git/bin:/git"
+      - "C:/Users/jian_/OneDrive/Documentos/projeto_t_a_c/ProjetoTac:/workspace"
     networks:
       - app-network
     depends_on:
