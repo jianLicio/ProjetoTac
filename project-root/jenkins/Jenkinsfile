@@ -6,10 +6,6 @@ pipeline {
         }
     }
 
-    environment {
-        // Defina variáveis de ambiente se necessário
-    }
-
     stages {
         stage('Load Environment') {
             steps {
