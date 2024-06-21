@@ -88,14 +88,13 @@ services:
       - sonarqube_extensions:/opt/sonarqube/extensions
 
   jenkins:
-    image: jenkins/jenkins:lts
+    build: .
     ports:
       - "8082:8080"
       - "50000:50000"
     volumes:
       - jenkins_home:/var/jenkins_home
       - /var/run/docker.sock:/var/run/docker.sock
-      - "C:/Program Files/Git/bin:/git"
       - "C:/Users/jian_/OneDrive/Documentos/projeto_t_a_c/ProjetoTac:/workspace"
     networks:
       - app-network

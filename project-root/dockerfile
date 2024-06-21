@@ -1,0 +1,10 @@
+FROM jenkins/jenkins:lts
+
+# Usuário root para instalar pacotes
+USER root
+
+# Instalar Git
+RUN apt-get update && apt-get install -y git
+
+# Voltar para o usuário Jenkins
+USER jenkins
