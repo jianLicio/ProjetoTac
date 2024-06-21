@@ -1,5 +1,3 @@
-# C:\Users\jian_\OneDrive\Documentos\projeto_t_a_c\ProjetoTac\project-root\jenkins\Jenkinsfile
-
 pipeline {
     agent {
         docker {
@@ -47,6 +45,11 @@ pipeline {
             steps {
                 script {
                     docker.image('maven:3.9.5-openjdk-17').inside('-v /var/run/docker.sock:/var/run/docker.sock -v /workspace:/workspace') {
+                         sh '''#!/bin/bash
+                            curl -H "Authorization: Bearer ${JWT_TOKEN}" \
+                            -X POST https://api.example.com/test
+                        '''
+                        
                         // Executar os testes
                         sh 'cd /workspace && mvn test'
                     }
