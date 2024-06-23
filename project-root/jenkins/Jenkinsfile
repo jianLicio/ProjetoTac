@@ -19,34 +19,32 @@ pipeline {
             }
         }
 
-        stage('Chamando API com JWT') {
+        stage('Test') {
+            agent {
+                docker {
+                    image 'maven:3.9.5-openjdk-17'
+                    args '-v /var/run/docker.sock:/var/run/docker.sock -v /workspace:/workspace'
+                }
+            }
             steps {
                 script {
-                    // Chamada GET no endpoint /pessoa
-                    def getResponse = sh(script: """curl -X GET -H "Authorization: Bearer ${JWT_TOKEN}" ${API_URL}/pessoa""", returnStdout: true).trim()
-                    echo "GET Response: ${getResponse}"
+                    docker.image('maven:3.9.5-openjdk-17').inside('-v /var/run/docker.sock:/var/run/docker.sock -v /workspace:/workspace') {
+                        // Executar chamadas à API com JWT
+                        sh '''#!/bin/bash
+                            # Chamada GET no endpoint /pessoa
+                            getResponse=$(curl -X GET -H "Authorization: Bearer ${JWT_TOKEN}" ${API_URL}/pessoa)
+                            echo "GET Response: ${getResponse}"
 
-                    // Chamada POST no endpoint /sensor
-                    def postResponse = sh(script: """curl -X POST -H "Authorization: Bearer ${JWT_TOKEN}" -H "Content-Type: application/json" -d '{"nome":"sensor1", "tipo":"temperatura"}' ${API_URL}/sensor""", returnStdout: true).trim()
-                    echo "POST Response: ${postResponse}"
+                            # Chamada POST no endpoint /sensor
+                            postResponse=$(curl -X POST -H "Authorization: Bearer ${JWT_TOKEN}" -H "Content-Type: application/json" -d '{"nome":"sensor1", "tipo":"temperatura"}' ${API_URL}/sensor)
+                            echo "POST Response: ${postResponse}"
+                        '''
+
+                        // Executar os testes do projeto
+                        sh 'cd /workspace && mvn clean install'
+                    }
                 }
             }
         }
-        stage('Test') {
-        agent {
-            docker {
-                image 'maven:3.9.5-openjdk-17'
-                args '-v /var/run/docker.sock:/var/run/docker.sock -v /workspace:/workspace'
-            }
-        }
-        steps {
-            script {
-                docker.image('maven:3.9.5-openjdk-17').inside('-v /var/run/docker.sock:/var/run/docker.sock -v /workspace:/workspace') {
-                    // Executar os testes do projeto
-                    sh 'cd /workspace && mvn clean install'
-                }
-            }
-        }
-    }
     }
 }
