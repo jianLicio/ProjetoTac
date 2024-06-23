@@ -36,13 +36,13 @@ public class PessoaDataFetcher implements GraphQLQueryResolver, GraphQLMutationR
         return pessoa.orElse(null);
     }
 
-    public Pessoa createPessoa(PessoaDTO dto) {
+    // public Pessoa createPessoa(PessoaDTO dto) {
 
-        System.out.println("Chamando o método createPessoa no resolver");
-        Pessoa createdPessoa = pessoaService.create(dto);
-        System.out.println("Pessoa created: " + createdPessoa); // Add logging
-        return createdPessoa;
-    }
+    //     System.out.println("Chamando o método createPessoa no resolver");
+    //     Pessoa createdPessoa = pessoaService.create(dto);
+    //     System.out.println("Pessoa created: " + createdPessoa); // Add logging
+    //     return createdPessoa;
+    // }
 
     public Pessoa updatePessoa(long id, PessoaDTO dto) throws NotFoundException {
         System.out.println("Chamando o método updatePessoa no resolver");

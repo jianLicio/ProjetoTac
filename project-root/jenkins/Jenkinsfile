@@ -1,58 +1,119 @@
 pipeline {
-    agent none
+    agent any
+
+    environment {
+        API_URL = 'http://127.0.0.1:8081' // URL base da sua API
+        LOGIN_URL = 'http://127.0.0.1:8081/autenticar' // Endpoint de autenticação
+        USERNAME = credentials('maria.oliveira@example.com') // ID da credencial do Jenkins para o username
+        PASSWORD = credentials('senha123') // ID da credencial do Jenkins para a senha
+    }
 
     stages {
-        stage('Load Environment') {
+        stage('Authenticate and Get JWT') {
             steps {
                 script {
-                    // Carregar o arquivo .env e definir as variáveis de ambiente
-                    def envFile = readFile('/workspace/.env')  // Ajustado para caminho correto
-                    def envVars = envFile.split('\n')
-                    envVars.each { line ->
-                        def parts = line.split('=')
-                        if (parts.length == 2) {
-                            def key = parts[0].trim()
-                            def value = parts[1].trim()
-                            env[key] = value
-                        }
-                    }
+                    // Realiza a autenticação e obtém o JWT
+                    def response = sh(script: """curl -X POST -H "Content-Type: application/json" -d '{"email": "${USERNAME}", "senha": "${PASSWORD}"}' ${LOGIN_URL}""", returnStdout: true).trim()
+                    env.JWT_TOKEN = response // Armazena a resposta diretamente como o token JWT
                 }
             }
         }
-        // stage('Build') {
-        //     steps {
-        //         script {
-        //             docker.image('maven:3.9.5-openjdk-17').inside('-v /var/run/docker.sock:/var/run/docker.sock -v /workspace:/workspace') {
-        //                 // Verificar a versão do Maven
-        //                 sh 'mvn --version'
 
-        //                 // Compilar e empacotar o projeto
-        //                 sh 'cd /workspace && mvn package -Dmaven.test.skip=true'
-        //             }
-        //         }
-        //     }
-        // }
-        stage('Test') {
-            agent  {
-                docker {
-                    image 'maven:3.9.5-openjdk-17'
-                    args '-v /var/run/docker.sock:/var/run/docker.sock -v /workspace:/workspace'
-                }
-            }
-            steps { 
+        stage('Chamando API com JWT') {
+            steps {
                 script {
-                    docker.image('maven:3.9.5-openjdk-17').inside('-v /var/run/docker.sock:/var/run/docker.sock -v /workspace:/workspace') {
-                        // Utilizar o JWT para autenticar a API
-                        sh '''#!/bin/bash
-                            curl -H "Authorization: Bearer ${JWT_TOKEN}" \
-                            -X POST https://api.example.com/test
-                        '''
+                    // Chamada GET no endpoint /pessoa
+                    def getResponse = sh(script: """curl -X GET -H "Authorization: Bearer ${JWT_TOKEN}" ${API_URL}/pessoa""", returnStdout: true).trim()
+                    echo "GET Response: ${getResponse}"
 
-                        // Executar os testes do projeto
-                        sh 'cd /workspace && mvn clean install'
-                    }
+                    // Chamada POST no endpoint /sensor
+                    def postResponse = sh(script: """curl -X POST -H "Authorization: Bearer ${JWT_TOKEN}" -H "Content-Type: application/json" -d '{"nome":"sensor1", "tipo":"temperatura"}' ${API_URL}/sensor""", returnStdout: true).trim()
+                    echo "POST Response: ${postResponse}"
                 }
             }
         }
     }
 }
+// pipeline {
+//     agent any
+
+//     environment {
+//         API_URL = 'http://127.0.0.1:8081'
+//         LOGIN_URL = 'http://127.0.0.1:8081/autenticar' 
+//         USERNAME = credentials('maria.oliveira@example.com') 
+//         PASSWORD = credentials('senha123')
+//     }
+
+//     stages {
+//         stage('Autenticando e Obtendo JWT') {
+//             steps {
+//                 script {
+//                     // Realiza a autenticação e obtém o JWT
+//                     def response = sh(script: """curl -X POST -H "Content-Type: application/json" -d '{"email": "${USERNAME}", "senha": "${PASSWORD}"}' ${LOGIN_URL}""", returnStdout: true).trim()
+//                     env.JWT_TOKEN = response // Armazena a resposta diretamente como o token JWT
+//                 }
+//             }
+//         }
+
+//         stage('Chamando API com JWT') {
+//             steps {
+//                 script {
+//                     // Faz uma chamada GET autenticada
+//                     def getResponse = sh(script: """curl -X GET -H "Authorization: Bearer ${JWT_TOKEN}" ${API_URL}/some-endpoint""", returnStdout: true).trim()
+//                     echo "GET Response: ${getResponse}"
+
+//                     // Faz uma chamada POST autenticada
+//                     def postResponse = sh(script: """curl -X POST -H "Authorization: Bearer ${JWT_TOKEN}" -H "Content-Type: application/json" -d '{"key":"value"}' ${API_URL}/another-endpoint""", returnStdout: true).trim()
+//                     echo "POST Response: ${postResponse}"
+//                 }
+//             }
+//         }
+//     }
+// }
+
+// pipeline {
+//     agent none
+
+//     stages {
+//         stage('Load Environment') {
+//             steps {
+//                 script {
+//                     // Carregar o arquivo .env e definir as variáveis de ambiente
+//                     def envFile = readFile('/workspace/.env')  // Ajustado para caminho correto
+//                     def envVars = envFile.split('\n')
+//                     envVars.each { line ->
+//                         def parts = line.split('=')
+//                         if (parts.length == 2) {
+//                             def key = parts[0].trim()
+//                             def value = parts[1].trim()
+//                             env[key] = value
+//                         }
+//                     }
+//                 }
+//             }
+//         }
+       
+//         stage('Test') {
+//             agent  {
+//                 docker {
+//                     image 'maven:3.9.5-openjdk-17'
+//                     args '-v /var/run/docker.sock:/var/run/docker.sock -v /workspace:/workspace'
+//                 }
+//             }
+//             steps { 
+//                 script {
+//                     docker.image('maven:3.9.5-openjdk-17').inside('-v /var/run/docker.sock:/var/run/docker.sock -v /workspace:/workspace') {
+//                         // Utilizar o JWT para autenticar a API
+//                         sh '''#!/bin/bash
+//                             curl -H "Authorization: Bearer ${JWT_TOKEN}" \
+//                             -X POST https://api.example.com/test
+//                         '''
+
+//                         // Executar os testes do projeto
+//                         sh 'cd /workspace && mvn clean install'
+//                     }
+//                 }
+//             }
+//         }
+//     }
+// }

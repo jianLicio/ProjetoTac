@@ -1,6 +1,5 @@
 package utfpr.edu.br.t_a_c.projeto_t_a_c.model;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -38,7 +37,7 @@ public class Pessoa {
     private String senha;
 
     @Column(name = "data_nascimento")
-    private LocalDate dataNascimento;
+    private LocalDateTime dataNascimento;
 
     @OneToMany(mappedBy = "pessoa", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference

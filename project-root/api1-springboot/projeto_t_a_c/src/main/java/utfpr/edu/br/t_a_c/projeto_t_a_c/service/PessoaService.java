@@ -9,8 +9,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
-import graphql.kickstart.tools.GraphQLMutationResolver;
-import graphql.kickstart.tools.GraphQLQueryResolver;
 import utfpr.edu.br.t_a_c.projeto_t_a_c.dto.PessoaDTO;
 import utfpr.edu.br.t_a_c.projeto_t_a_c.exception.NotFoundException;
 import utfpr.edu.br.t_a_c.projeto_t_a_c.model.Pessoa;
@@ -18,7 +16,7 @@ import utfpr.edu.br.t_a_c.projeto_t_a_c.repository.PessoaRepository;
 
 @Service
 @Component
-public class PessoaService implements GraphQLQueryResolver, GraphQLMutationResolver {
+public class PessoaService {
 
     @Autowired
     private PessoaRepository pessoaRepository;
@@ -26,21 +24,38 @@ public class PessoaService implements GraphQLQueryResolver, GraphQLMutationResol
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public Pessoa create(PessoaDTO dto) {
-        var pessoa = new Pessoa();
+    // public Pessoa create(PessoaDTO dto) {
+    // var pessoa = new Pessoa();
+    // BeanUtils.copyProperties(dto, pessoa);
+    // pessoa.setSenha(passwordEncoder.encode(dto.senha()));
+
+    // return pessoaRepository.save(pessoa);
+    // }
+
+    public Pessoa save(PessoaDTO dto) {
+        Pessoa pessoa = new Pessoa();
         BeanUtils.copyProperties(dto, pessoa);
         pessoa.setSenha(passwordEncoder.encode(dto.senha()));
-
         return pessoaRepository.save(pessoa);
     }
- 
+
+    public String encryptPassword(String senha) {
+        return passwordEncoder.encode(senha);
+    }
+
+    // public Pessoa save(Pessoa pessoa) {
+    // pessoa.setSenha(passwordEncoder.encode(pessoa.getSenha()));
+
+    // return pessoaRepository.save(pessoa);
+    // }
+
     public List<Pessoa> getAll() {
         List<Pessoa> pessoas = pessoaRepository.findAll();
         System.out.println("Pessoas recuperadas: " + pessoas);
         return pessoas;
         // return pessoaRepository.findAll();
     }
-    
+
     public Optional<Pessoa> getById(long id) {
         return pessoaRepository.findById(id);
     }
@@ -74,4 +89,3 @@ public class PessoaService implements GraphQLQueryResolver, GraphQLMutationResol
     }
 
 }
-

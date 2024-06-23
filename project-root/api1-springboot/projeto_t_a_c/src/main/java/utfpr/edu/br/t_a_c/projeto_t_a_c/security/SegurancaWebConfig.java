@@ -35,6 +35,7 @@ public class SegurancaWebConfig {
                 .csrf(csrf -> csrf.disable())
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(authz -> authz
+                        .requestMatchers("/pessoa").permitAll()
                         .requestMatchers("/pessoa/**").authenticated()
                         .requestMatchers("/graphql").authenticated()
                         .requestMatchers("/graphiql").permitAll()
@@ -67,5 +68,4 @@ public class SegurancaWebConfig {
         source.registerCorsConfiguration("/**", config);
         return source;
     }
-
 }
