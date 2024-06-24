@@ -18,8 +18,8 @@
 		<java.version>17</java.version>
 		<sonar.organization>jianlicio</sonar.organization>
 		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
-		<sonar.local.host.url>http://localhost:9000</sonar.local.host.url>
-		<sonar.token>sqp_91dbfd977d156cd6598dea0e0566bf1b5f64304c</sonar.token>
+		<!-- <sonar.local.host.url>http://localhost:9000</sonar.local.host.url> -->
+		<!-- <sonar.token>b75859c88a47da3ecdfba7e125f134e363e1b8ad</sonar.token> -->
 	</properties>
 	<dependencies>
 
