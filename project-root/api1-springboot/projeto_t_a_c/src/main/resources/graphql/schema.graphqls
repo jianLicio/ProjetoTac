@@ -1,0 +1,34 @@
+type Query {
+    pessoas: [Pessoa]
+    pessoa(id: ID!): Pessoa
+}
+
+type Mutation {
+    # createPessoa(input: PessoaInput!): Pessoa
+    updatePessoa(id: ID!, input: PessoaInput!): Pessoa
+    deletePessoa(id: ID!): String
+}
+
+type Pessoa {
+    id: ID!
+    nome: String!
+    email: String!
+    senha: String!
+    dataNascimento: String!
+    gateways: [Gateway]
+    criadoEm: String!
+    atualizadoEm: String!
+}
+
+input PessoaInput {
+    nome: String!
+    email: String!
+    senha: String!
+    dataNascimento: String!
+    gatewayId: [ID!]
+}
+
+type Gateway {
+    id: ID!
+    nome: String!
+}
