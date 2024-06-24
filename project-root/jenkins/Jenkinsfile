@@ -28,7 +28,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 // Clona o repositório de código
-                git 'https://github.com/jianLicio/ProjetoTac.git'
+                 git branch: 'GraphQL', url: 'https://seu-repositorio.git'
             }
         }
 
