@@ -82,10 +82,10 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
-      # - name: Install Node.js dependencies
-      #   run: npm install
+      - name: Install Node.js dependencies
+        run: npm install
 
-      # - name: Build and analyze Node.js project
-      #   env:
-      #     SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-      #   run: npm run build && sonar-scanner -Dsonar.projectKey=jianLicio_ProjetoTac -Dsonar.projectName=ProjetoTac -Dsonar.sources=src -Dsonar.sourceEncoding=UTF-8
+      - name: Build and analyze Node.js project
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: npm run build && sonar-scanner -Dsonar.projectKey=jianLicio_ProjetoTac -Dsonar.projectName=ProjetoTac -Dsonar.sources=src -Dsonar.sourceEncoding=UTF-8
