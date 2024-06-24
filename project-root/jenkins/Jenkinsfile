@@ -7,6 +7,7 @@ pipeline {
         LOGIN_URL = 'http://127.0.0.1:8081/autenticar' // Endpoint de autenticação
         USERNAME = credentials('maria.oliveira@example.com') // ID da credencial do Jenkins para o username
         PASSWORD = credentials('senha123') // ID da credencial do Jenkins para a senha
+        SONAR_TOKEN = credentials('sonarcloud-token')
     }
 
     stages {
@@ -66,6 +67,27 @@ pipeline {
                 }
             }
         }
+
+        stage('SonarQube Analysis') {
+            steps {
+                withSonarQubeEnv('sonarcloud') { // Assegure que o SonarQube está configurado no Jenkins
+                    script {
+                        def mvnHome = tool 'Maven 3.6.3'
+                        sh "${mvnHome}/bin/mvn sonar:sonar -Dsonar.login=${SONAR_TOKEN}"
+                    }
+                }
+            }
+        }
+
+        stage("Quality Gate") {
+            steps {
+                sleep time: 1, unit: 'MINUTES' // Aguarde um minuto para SonarCloud processar
+                timeout(time: 5, unit: 'MINUTES') {
+                    waitForQualityGate abortPipeline: true
+                }
+            }
+        }
+    
 
         post {
             always {

@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.3.0</version>
+		<version>3.3.1</version>
 		<relativePath/>
 		<!-- lookup parent from repository -->
 	</parent>
@@ -18,6 +18,8 @@
 		<java.version>17</java.version>
 		<sonar.organization>jianlicio</sonar.organization>
 		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
+		<sonar.local.host.url>http://localhost:9000</sonar.local.host.url>
+		<sonar.token>sqp_91dbfd977d156cd6598dea0e0566bf1b5f64304c</sonar.token>
 	</properties>
 	<dependencies>
 
@@ -164,6 +166,11 @@
 	<build>
 		<plugins>
 			<plugin>
+				<groupId>org.sonarsource.scanner.maven</groupId>
+				<artifactId>sonar-maven-plugin</artifactId>
+				<version>3.9.1.2184</version>
+			</plugin>
+			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
@@ -196,4 +203,31 @@
 			</plugin>
 		</plugins>
 	</build>
+	<profiles>
+		<profile>
+			<id>sonarcloud</id>
+			<properties>
+				<sonar.host.url>${sonar.host.url}</sonar.host.url>
+				<sonar.organization>${sonar.organization}</sonar.organization>
+			</properties>
+		</profile>
+		<profile>
+			<id>sonarlocal</id>
+			<properties>
+				<sonar.host.url>${sonar.local.host.url}</sonar.host.url>
+			</properties>
+		</profile>
+	</profiles>
+
+	<distributionManagement>
+		<repository>
+			<id>releases</id>
+			<url>http://your.repository.url/releases</url>
+		</repository>
+		<snapshotRepository>
+			<id>snapshots</id>
+			<url>http://your.repository.url/snapshots</url>
+		</snapshotRepository>
+	</distributionManagement>
+
 </project>
