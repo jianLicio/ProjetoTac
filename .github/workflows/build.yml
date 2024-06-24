@@ -38,11 +38,13 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
 
       - name: Build and analyze Java project
         working-directory: ./project-root/api1-springboot
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
         run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=jianLicio_ProjetoTac -Dsonar.projectName=ProjetoTac -Dsonar.sources=src/main/java
 
   build-api2:
@@ -74,6 +76,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
 
       - name: Install Node.js dependencies
         run: npm install
@@ -81,4 +84,5 @@ jobs:
       - name: Build and analyze Node.js project
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
         run: npm run build && sonar-scanner -Dsonar.projectKey=jianLicio_ProjetoTac -Dsonar.projectName=ProjetoTac -Dsonar.sources=src -Dsonar.sourceEncoding=UTF-8
