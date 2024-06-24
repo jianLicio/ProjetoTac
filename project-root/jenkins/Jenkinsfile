@@ -9,13 +9,27 @@ pipeline {
     }
 
     stages {
-        stage('Authenticate and Get JWT') {
+        stage('Autenticar e Pegar JWT') {
             steps {
                 script {
                     // Realiza a autenticação e obtém o JWT
                     def response = sh(script: """curl -X POST -H "Content-Type: application/json" -d '{"email": "${USERNAME}", "senha": "${PASSWORD}"}' ${LOGIN_URL}""", returnStdout: true).trim()
                     env.JWT_TOKEN = response // Armazena a resposta diretamente como o token JWT
                 }
+            }
+        }
+
+        stage('Checkout') {
+            steps {
+                // Clona o repositório de código
+                git 'https://github.com/jianLicio/ProjetoTac.git'
+            }
+        }
+
+        stage('Build') {
+            steps {
+                // Compila o projeto usando Maven
+                sh 'mvn clean compile'
             }
         }
 
@@ -46,12 +60,16 @@ pipeline {
                 }
             }
         }
+
         post {
             always {
+                // Arquiva os resultados dos testes
+                junit '**/target/surefire-reports/*.xml'
+
                 script {
                     // Configuração de e-mail
                     emailext (
-                        to: 'jian_oliveira12@hotmail.com',
+                        to: 'jian.testes@gmail.com',
                         subject: "Resultado da build #${env.BUILD_NUMBER}: ${currentBuild.currentResult}",
                         body: """<p>Build #${env.BUILD_NUMBER} terminou com o status: ${currentBuild.currentResult}</p>
                                 <p>Detalhes: <a href="${env.BUILD_URL}">${env.BUILD_URL}</a></p>"""
@@ -59,14 +77,12 @@ pipeline {
                 }
             }
             success {
-                script {
-                    echo "Build foi bem-sucedida."
-                }
+                // Ações em caso de sucesso
+                echo 'Build e Testes foram bem-sucedidos.'
             }
             failure {
-                script {
-                    echo "Build falhou."
-                }
+                // Ações em caso de falha
+                echo 'Build ou Testes falharam.'
             }
         }
     }
