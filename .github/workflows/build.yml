@@ -45,7 +45,7 @@ jobs:
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
-        run: mvn clean verify sonar:sonar "-Dsonar.projectKey=jianLicio_ProjetoTac" "-Dsonar.projectName='jianLicio_ProjetoTac'" "-Dsonar.host.url=http://localhost:9000" "-Dsonar.login=sqp_75b3109aa1ea228c98cecc5366e4ac1290283885"
+        run: mvn clean verify sonar:sonar "-Dsonar.projectKey=ProjetoTac" "-Dsonar.projectName='jianLicio_ProjetoTac'" "-Dsonar.host.url=http://localhost:9000" "-Dsonar.login=sqp_75b3109aa1ea228c98cecc5366e4ac1290283885"
 
   build-api2:
     name: Build and analyze API2-Express
@@ -85,4 +85,4 @@ jobs:
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
-        run: npm run build && sonar-scanner -Dsonar.projectKey=jianLicio_ProjetoTac -Dsonar.projectName=ProjetoTac -Dsonar.sources=src -Dsonar.sourceEncoding=UTF-8
+        run: npm run build && sonar-scanner -Dsonar.projectKey=ProjetoTac -Dsonar.projectName=ProjetoTac -Dsonar.sources=src -Dsonar.sourceEncoding=UTF-8
